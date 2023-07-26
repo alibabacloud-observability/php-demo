@@ -53,7 +53,66 @@ $app->run();
 
 
 
-### 3. 下载 OpenTelemetry PHP 以及 OpenTelemetry gRPC Explorer 所需依赖
+### 3. 构建 OpenTelemetry PHP 扩展（如之前已经构建过，可跳过）
+
+
+1. 下载构建 OpenTelemetry PHP 所需要的工具
+
+```shell
+# macOS
+brew install gcc make autoconf
+
+# Linux(apt)
+sudo apt-get install gcc make autoconf
+```
+
+1. 使用 pecl 构建 OpenTelemetry PHP 
+
+```shell
+pecl install opentelemetry-beta
+```
+
+* 注意: 构建成功时输出内容的最后几行为(路径可能不完全一致): 
+
+```shell
+Build process completed successfully
+Installing '/opt/homebrew/Cellar/php/8.2.8/pecl/20220829/opentelemetry.so'
+install ok: channel://pecl.php.net/opentelemetry-1.0.0beta6
+Extension opentelemetry enabled in php.ini
+```
+
+3. 启用 OpenTelemetry PHP 扩展
+* 在 php.ini 文件中添加如下内容（注意：如果上一步输出了
+"Extension opentelemetry enabled in php.ini"，表明已经启用，这一步请跳过）
+
+```txt
+[opentelemetry]
+extension=opentelemetry.so
+```
+
+4. 再次验证是否构建&启用成功
+
+* 方法一
+
+```
+php -m | grep opentelemetry
+
+
+# 预期输出
+opentelemetry
+```
+
+* 方法二
+```
+php --ri opentelemetry
+
+# 预期输出
+opentelemetry
+opentelemetry support => enabled
+extension version => 1.0.0beta6
+```
+
+### 4. 导入 OpenTelemetry PHP SDK 以及 OpenTelemetry gRPC Explorer 所需依赖
 
 1. 下载 PHP HTTP 客户端库，用于链路数据上报
 ```bash
@@ -75,7 +134,7 @@ composer require open-telemetry/transport-grpc
 ```
 
 
-### 4. 编写OpenTelemetry初始化工具类
+### 5. 编写OpenTelemetry初始化工具类
 
 * 在 index.php 所在目录中创建 opentelemetry_util.php 文件
 * 在文件中添加如下代码，并替换以下变量的值
@@ -150,7 +209,7 @@ function initOpenTelemetry()
 
 ```
 
-### 5. 修改应用代码，使用OpenTelemetry API创建Span
+### 6. 修改应用代码，使用OpenTelemetry API创建Span
 
 1. 在index.php中导入所需包
 
