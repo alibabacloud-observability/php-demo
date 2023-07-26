@@ -112,7 +112,7 @@ function initOpenTelemetry()
 { 
     // 1. 设置 OpenTelemetry 资源信息
     $resource = ResourceInfoFactory::emptyResource()->merge(ResourceInfo::create(Attributes::create([
-        ResourceAttributes::SERVICE_NAME => '<your-service-name>', # 应用名，必填
+        ResourceAttributes::SERVICE_NAME => '<your-service-name>', # 应用名，必填，如php-manual-demo
         ResourceAttributes::HOST_NAME => '<your-host-name>' # 主机名，选填
     ])));
 
@@ -244,8 +244,7 @@ $app->get('/rolltwodices', function (Request $request, Response $response) {
 ```
 
 
-
-1. 使用Span记录代码中发生的异常
+5. 使用Span记录代码中发生的异常
 
 * 新建error接口
 * 接口功能：模拟接口发生异常
@@ -272,3 +271,26 @@ $app->get('/error', function (Request $request, Response $response) {
     }
 });
 ```
+
+### 6. 运行应用
+
+1. 执行以下命令
+
+```shell
+php -S localhost:8080
+```
+
+2. 访问链接： 
+   * http://localhost:8080/rolldice
+   * http://localhost:8080/rolltwodices
+   * http://localhost:8080/error
+
+* 每次访问页面，OpenTelemetry会创建链路数据，并上报至阿里云可观测链路OpenTelemetry版
+
+
+3. 查看链路数据
+
+* 登陆阿里云可观测链路OpenTelemetry版控制台，找到应用名为\<your-service-name>的应用（例如php-manual-demo），点击进入应用详情中查看调用链。
+
+
+

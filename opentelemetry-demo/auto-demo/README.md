@@ -155,7 +155,7 @@ env OTEL_PHP_AUTOLOAD_ENABLED=true \
     php -S localhost:8080
 ```
 
-2. 访问应用： http://localhost:8081/rolldice
+2. 访问应用： http://localhost:8080/rolldice
 
 * 每次进入该页面，OpenTelemetry 都会自动创建Trace，并将链路数据上报至阿里云可观测链路OpenTelemetry版
 
