@@ -1,6 +1,6 @@
-## 自动埋点
+## 基于 OpenTelemery PHP Extension 为应用自动埋点并上报链路数据
 
-本 demo 基于 PHP Slim Web 框架实现一个模拟扔骰子游戏的应用，并使用 OpenTelemetry 为应用自动埋点（即自动创建Trace/Span等链路数据），实现无侵入的PHP应用链路追踪。
+auto-demo 是基于 PHP Slim Web 框架实现一个模拟扔骰子游戏的应用，并使用 OpenTelemetry 为应用自动埋点（即自动创建Trace/Span等链路数据），实现无侵入的PHP应用链路追踪。
 
 
 OpenTelemetry 除了支持 Slim 框架的自动埋点，还支持多种框架，完整列表请参考 https://opentelemetry.io/ecosystem/registry/?component=instrumentation&language=php
@@ -50,7 +50,7 @@ $app->run();
 
 ```
 
-* 此时应用已经编写完成，执行 `php -S localhost:8080` 命令即可运行应用，访问地址为 http://localhost:8081/rolldice
+* 此时应用已经编写完成，执行 `php -S localhost:8080` 命令即可运行应用，访问地址为 http://localhost:8080/rolldice
 
 ### 3. 构建 OpenTelemetry PHP 扩展
 
