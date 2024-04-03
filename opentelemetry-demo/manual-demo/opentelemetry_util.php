@@ -14,9 +14,13 @@ use OpenTelemetry\SDK\Trace\SpanProcessor\SimpleSpanProcessor;
 use OpenTelemetry\SDK\Trace\SpanProcessor\BatchSpanProcessorBuilder;
 use OpenTelemetry\SDK\Trace\TracerProvider;
 use OpenTelemetry\SemConv\ResourceAttributes;
-use OpenTelemetry\Contrib\Grpc\GrpcTransportFactory;
-use OpenTelemetry\Contrib\Otlp\OtlpUtil;
-use OpenTelemetry\API\Common\Signal\Signals;
+// 通过 HTTP 上报
+use OpenTelemetry\Contrib\Otlp\OtlpHttpTransportFactory;
+// 通过 gRPC 上报
+// use OpenTelemetry\Contrib\Grpc\GrpcTransportFactory;
+// use OpenTelemetry\Contrib\Otlp\OtlpUtil;
+// use OpenTelemetry\API\Common\Signal\Signals;
+
 
 // OpenTelemetry 初始化配置（需要在PHP应用初始化时就进行OpenTelemetry初始化配置）
 function initOpenTelemetry()
@@ -28,16 +32,20 @@ function initOpenTelemetry()
     ])));
 
 
-    // 2. 创建将 Span 输出到控制台的 SpanExplorer
+    // 2.1 创建将 Span 输出到控制台的 SpanExplorer
     // $spanExporter = new SpanExporter(
     //     (new StreamTransportFactory())->create('php://stdout', 'application/json')
     // );
 
-    // 2. 创建通过 gRPC 上报 Span 的 SpanExplorer
-    $headers = [
-        'Authentication' => "<your-token>",
-    ];
-    $transport = (new GrpcTransportFactory())->create('<grpc-endpoint>' . OtlpUtil::method(Signals::TRACE), 'application/x-protobuf', $headers);
+    // 2.2 创建通过 gRPC 上报 Span 的 SpanExplorer
+    // $headers = [
+    //     'Authentication' => "<your-token>",
+    // ];
+    // $transport = (new GrpcTransportFactory())->create('<grpc-endpoint>' . OtlpUtil::method(Signals::TRACE), 'application/x-protobuf', $headers);
+    // $spanExporter = new SpanExporter($transport);
+
+    // 2.3 创建通过 HTTP 上报 Span 的 SpanExporter
+    $transport = (new OtlpHttpTransportFactory())->create('<http-endpoint>', 'application/x-protobuf');
     $spanExporter = new SpanExporter($transport);
 
 
